@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+    mosquitto: 
+        image: eclipse-mosquitto:2 
+        ports:
+          - 1883:1883 
+        volumes:
+          - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf 
+          - mosquitto_data:/mosquitto/data 
+          - mosquitto_log:/mosquitto/log 
+        restart: always
+    
+    telegraf: 
+        image: telegraf 
+        volumes:
+          - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf 
+        depends_on: 
+          - influxdb
+
