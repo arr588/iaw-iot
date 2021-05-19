@@ -17,4 +17,26 @@ services:
           - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf 
         depends_on: 
           - influxdb
+        restart: always
 
+    influxdb: 
+        image: influxdb 
+        ports:
+          - 8086:8086 
+        volumes:
+          - influxdb_data:/var/lib/influxdb 
+        environment:
+          - INFLUXDB_DB=iescelia_db 
+          - INFLUXDB_ADMIN_USER=root 
+          - INFLUXDB_ADMIN_PASSWORD=root 
+          - INFLUXDB_HTTP_AUTH_ENABLED=true
+        restart: always
+
+    grafana: 
+        image: grafana/grafana:7.4.0 
+        ports:
+          - 3000:3000 
+        volumes:
+          - grafana_data:/var/lib/grafana 
+        depends_on: 
+          - influxdb
